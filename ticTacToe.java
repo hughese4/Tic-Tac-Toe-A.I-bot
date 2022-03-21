@@ -3,13 +3,15 @@ import java.math.*;
 
 public class ticTacToe{
 
+    private String[][] boardState;
+
     //CONSTRUCTOR
     public ticTacToe(String gamemode){
         terminalPlay();
         return;
     }
 
-    public static void main(String[] args){
+    /*public static void main(String[] args){
         String gamemode = "";
         if (args[0].equals("terminal")){
             gamemode = "terminal";
@@ -21,7 +23,7 @@ public class ticTacToe{
             ticTacToe begin = new ticTacToe("terminal");
             
         }
-    }
+    }*/
 
     public String[][] initialBoard(){
         String[][] board = new String[3][3];
@@ -97,26 +99,32 @@ public class ticTacToe{
         Scanner input = new Scanner(System.in);
         if (botTurn == true){
             boolean again = true;
-            boolean more = true;
+            
+            System.out.println("\nThe bot will now go:\n");
             for(int i = 0; i < 3; i++){
                 for(int j = 0; j < 3; j++){
-                    if (board[i][j] == null){
-                        board[i][j] = botPiece;
+                    if (boardState[i][j] == "_"){
+                        boardState[i][j] = botPiece;
+                        again = false;
+                        break;
                     }
-                    
+                }
+                if (again == false){
+                    break;
                 }
             }
         }
 
         if (botTurn == false){
-            System.out.print("Column:\n> ");
+            System.out.println("\nYour turn:");
+            System.out.print("Row (1-3):\n> ");
             int column = input.nextInt();
-            System.out.print("Row:\n> ");
+            System.out.print("Column (1-3):\n> ");
             int row = input.nextInt();
-            board[column][row] = playerPiece;
+            board[column-1][row-1] = playerPiece;
         }
         
-        for(int i = 0; i < board.length; i++){
+        for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){ 
                 System.out.print(board[i][j] + " ");
             }
@@ -144,7 +152,7 @@ public class ticTacToe{
             System.out.println("In order to select a spot on the board, you must type the column number first, then the row number.");
             System.out.println("You may now make the first move");
 
-            board = changeBoard(board, false, playerChar, botChar);
+            //board = changeBoard(board, false, playerChar, botChar);
 
         }
         else if (letterChoice.equals("O") || letterChoice.equals("o")){
@@ -164,21 +172,24 @@ public class ticTacToe{
         }
         boolean botTurn = true;
         boolean again = true;
-        while (again == true){
-            int counter = 2;
+        int counter = 2;
+        while(again == true){
             if (counter % 2 == 0){
-                botTurn = true;
-            }
-            else {
                 botTurn = false;
             }
-            counter++;
-            System.out.println("This is a big ol test string");
-            board = changeBoard(board, botTurn, playerChar, botChar);
-            if (winCon(board) == true){
+            else {
+                botTurn = true;
+            }
+            
+            System.out.println(counter);
+            boardState = changeBoard(board, botTurn, playerChar, botChar);
+            boolean done = winCon(board);
+            if (done == true){
                 again = false;
+                //add functionality to decide which player won the game
                 System.out.println("The game is over now lol");
             }
+            counter++;
         }
         //return null;
     }
