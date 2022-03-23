@@ -1,42 +1,159 @@
 import java.util.*;
 import java.math.*;
+import java.util.Random;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.nio.file.*;
 
-public class ticTacToe{
+public class ticTacToe extends JFrame{// implements ActionListener{
 
+    private Container pane;
+    private String currentPlayer;
+    private JButton [][] board;
+    private boolean hasWinner;
+    private JMenuBar menuBar;
+    private JMenu menu;
+    private JMenuItem quit;
+    private JMenuItem newGame;
     private String[][] boardState;
 
     //CONSTRUCTOR
-    public ticTacToe(String gamemode){
-        terminalPlay();
+    public ticTacToe(){
+        super();
+        //setting up the gui
+        pane = getContentPane();
+        pane.setLayout(new GridLayout(3, 3));
+        setTitle("Tic Tac Toe");
+        setSize(800, 800);
+        setResizable(false);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setVisible(true);
+        currentPlayer = "x";
+        board = new JButton[3][3];
+        hasWinner = false;
+        initializeBoard();
+        initializeMenuBar();
+        
+        //else if (gamemode == "terminal"){
+            //terminalPlay();
+        //}
         return;
     }
 
-    /*public static void main(String[] args){
-        String gamemode = "";
-        if (args[0].equals("terminal")){
-            gamemode = "terminal";
-            ticTacToe begin = new ticTacToe(gamemode);
-        }
-        if (args[0].equals("gui")){
-            //gamemode = "gui";
-            System.out.println("The gui has not been implemented yet, taking you to terminal play...");
-            ticTacToe begin = new ticTacToe("terminal");
-            
-        }
-    }*/
+    private void initializeMenuBar(){
+        menuBar = new JMenuBar();
+        menu = new JMenu("File");
 
-    public String[][] initialBoard(){
+        newGame = new JMenuItem("New Game");
+        newGame.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                resetBoard();
+            }
+        });
+
+        quit = new JMenuItem("Quit");
+        quit.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        menu.add(newGame);
+        menu.add(quit);
+        menuBar.add(menu);
+        setJMenuBar(menuBar);
+    }
+
+    private void resetBoard(){
+        currentPlayer = "x";
+        hasWinner = false;
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                board[i][j].setText("");
+            }
+        }
+    }
+
+    private void initializeBoard(){
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                JButton btn = new JButton();
+                btn.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 100));
+                board[i][j] = btn;
+                btn.addActionListener(new ActionListener(){
+                    public void actionPerformed(ActionEvent e){
+                        if(((JButton)e.getSource()).getText().equals("") && hasWinner == false){
+                            btn.setText(currentPlayer);
+                            hasWinner();
+                            togglePlayer();
+
+                        }
+                    }
+                });
+                pane.add(btn);
+            }
+        }
+    }
+
+    private void togglePlayer(){
+        if(currentPlayer.equals("x")){
+            currentPlayer = "o";
+        }
+        else {
+            currentPlayer = "x";
+        }
+    }
+
+    private void hasWinner(){
+        if(board[0][0].getText().equals(currentPlayer) && board[1][0].getText().equals(currentPlayer) && board[2][0].getText().equals(currentPlayer)){
+            JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " has won.");
+            hasWinner = true;
+        }
+        if(board[0][1].getText().equals(currentPlayer) && board[1][1].getText().equals(currentPlayer) && board[2][1].getText().equals(currentPlayer)){
+            JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " has won.");
+            hasWinner = true;
+        }
+        if(board[0][2].getText().equals(currentPlayer) && board[1][2].getText().equals(currentPlayer) && board[2][2].getText().equals(currentPlayer)){
+            JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " has won.");
+            hasWinner = true;
+        }
+        if(board[0][0].getText().equals(currentPlayer) && board[0][1].getText().equals(currentPlayer) && board[0][2].getText().equals(currentPlayer)){
+            JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " has won.");
+            hasWinner = true;
+        }
+        if(board[1][0].getText().equals(currentPlayer) && board[1][1].getText().equals(currentPlayer) && board[1][1].getText().equals(currentPlayer)){
+            JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " has won.");
+            hasWinner = true;
+        }
+        if(board[2][0].getText().equals(currentPlayer) && board[2][1].getText().equals(currentPlayer) && board[2][2].getText().equals(currentPlayer)){
+            JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " has won.");
+            hasWinner = true;
+        }
+        if(board[0][0].getText().equals(currentPlayer) && board[1][1].getText().equals(currentPlayer) && board[2][2].getText().equals(currentPlayer)){
+            JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " has won.");
+            hasWinner = true;
+        }
+        if(board[2][0].getText().equals(currentPlayer) && board[1][1].getText().equals(currentPlayer) && board[0][2].getText().equals(currentPlayer)){
+            JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " has won.");
+            hasWinner = true;
+        }
+        
+    }
+
+    /*public String[][] initialBoardTerminal(){
         String[][] board = new String[3][3];
+        //Arrays.fill(board, "_");
         for(int i = 0; i < board.length; i++){
             for(int j = 0; j < 3; j++){
                 board[i][j] = "_";
             }
         }
         return board;
-    }
+    }*/
 
     //if the given boardstate matches any of the following board states, then the board is in a winning state
-    public boolean winCon(String[][] boardState){
+    /*public boolean winCon(String[][] boardState){
         //first three are across wins
         if (boardState[0][0].equals("O") && boardState[1][0].equals("O") && boardState[2][0].equals("O")){
             return true;
@@ -93,26 +210,20 @@ public class ticTacToe{
             return true;
         }
         return false;
-    }
+    }*/
 
-    public String[][] changeBoard(String[][] board, boolean botTurn, String playerPiece, String botPiece){
+    /*public String[][] changeBoard(String[][] board, boolean botTurn, String playerPiece, String botPiece){
+        Random rand = new Random();
         Scanner input = new Scanner(System.in);
         if (botTurn == true){
-            boolean again = true;
-            
+                        
             System.out.println("\nThe bot will now go:\n");
-            for(int i = 0; i < 3; i++){
-                for(int j = 0; j < 3; j++){
-                    if (boardState[i][j] == "_"){
-                        boardState[i][j] = botPiece;
-                        again = false;
-                        break;
-                    }
-                }
-                if (again == false){
-                    break;
-                }
-            }
+
+            //bot makes a random move on the board
+            int botRow = rand.nextInt(3);
+            int botColumn = rand.nextInt(3);
+            board[botRow][botColumn] = botPiece;
+            
         }
 
         if (botTurn == false){
@@ -132,15 +243,19 @@ public class ticTacToe{
         }
 
         return board;
-    }
+    }*/
     
-    public void terminalPlay(){
+    //method for playing the game in the terminal
+    /*public void terminalPlay(){
         Scanner input = new Scanner(System.in);
         String playerChar = "";
         String botChar = "";
+        boolean botTurn = true;
+        boolean again = true;
+        int counter = 2;
         System.out.println("\nYou have entered terminal play mode. When prompted, enter your input then press return.");
 
-        String[][] board = initialBoard();
+        String[][] board = initialBoardTerminal();
 
         System.out.print("Choose X's or O's (type X or O): \n> ");
         String letterChoice = input.next();
@@ -150,9 +265,7 @@ public class ticTacToe{
             botChar = "O";
             System.out.println("You have chosen X's. You go first.");
             System.out.println("In order to select a spot on the board, you must type the column number first, then the row number.");
-            System.out.println("You may now make the first move");
-
-            //board = changeBoard(board, false, playerChar, botChar);
+            System.out.println("You may now make the first move.");
 
         }
         else if (letterChoice.equals("O") || letterChoice.equals("o")){
@@ -160,20 +273,20 @@ public class ticTacToe{
             botChar = "X";
             System.out.println("You have chosen O's. You go second.");
             System.out.println("In order to select a spot on the board, you must type the column number first, then the row number.");
-            System.out.println("The bot will now make the first move:");
-            //rand1 and 2 need to randomly choose a number between 1 and 4
-            //int rand1 = 0;//(Math.random()*40);
-            //int rand2 = 0;//(Math.random()*40);
-            //the bot selects one of the corners to make it's starting move
-            //for testing purposes and cuz I'm on the plane rn and forget how random numbers work, I'll manually set it to one of the corners
-            //board[rand1][rand2] = "X";
-
-            board = changeBoard(board, true, playerChar, botChar);
+            System.out.println("The bot will make the first move.");
+            
+            //sets counter to 3 so that it becomes the bot's turn first in the following loop
+            counter = 3;
         }
-        boolean botTurn = true;
-        boolean again = true;
-        int counter = 2;
+        
+        //while loop runs the actual playing of the game (maybe make a different function at some point)
         while(again == true){
+            //if we get to a cat, game exits and prints a statement about tying
+            //maybe change this so that its more concrete later
+            if (((counter >= 12))){
+                System.out.println("\nThis game has resulted in a tie.");
+                break;
+            }
             if (counter % 2 == 0){
                 botTurn = false;
             }
@@ -181,16 +294,18 @@ public class ticTacToe{
                 botTurn = true;
             }
             
-            System.out.println(counter);
             boardState = changeBoard(board, botTurn, playerChar, botChar);
             boolean done = winCon(board);
+            counter++;
             if (done == true){
                 again = false;
-                //add functionality to decide which player won the game
-                System.out.println("The game is over now lol");
+                if (botTurn == true){
+                    System.out.println("The bot has won the game, better luck next time.");
+                }
+                else{
+                    System.out.println("You have won the game!");
+                }
             }
-            counter++;
-        }
-        //return null;
-    }
+        }*/
+    
 }
