@@ -15,8 +15,13 @@ public class TicTacToeBot extends JFrame {
 
     //CONSTRUCTOR
     public TicTacToeBot(){
+        super();
         MainBoard mainBoard = new MainBoard();
+        BotMoves botMove = new BotMoves();
+        Player player = new Player();
+
         mainBoard.initializeBoard();
+        mainBoard.updateBoard();
     }
 
     public static void main(String[] args){
