@@ -5,7 +5,7 @@ import java.awt.event.*;
 
 //this class needs to take the mainboard as a parameter, and return a move so that the
 //main board gets updated             
-public class BotMoves extends JFrame implements ActionListener{
+public class BotMoves{// extends JFrame implements ActionListener{
 
     private JButton[][] board;
 
@@ -13,10 +13,9 @@ public class BotMoves extends JFrame implements ActionListener{
         
     }
 
-    //OPTIMALMOVE
-    //this method should eventually calculate the most optimal move for the bot to make
-    //given the current board state.
-    public JButton[][] optimalMove(String botPiece){
+    //RANDOMMOVE
+    //this method returns a random move for the sake of testing
+    public String[][] randomMove(String botPiece){
         Random rand = new Random();
         JButton btn = new JButton();
         //until optimal move is implemented, bot makes a random move
@@ -28,9 +27,9 @@ public class BotMoves extends JFrame implements ActionListener{
         return null;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
+    //this method should return the minimax'd optimal move
+    public String[][] optimalMove(){
         
+        return null;
     }
 }
