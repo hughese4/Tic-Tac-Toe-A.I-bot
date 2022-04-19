@@ -33,6 +33,7 @@ public class BotMove{// extends JFrame implements ActionListener{
         return board;
     } */
 
+    // ISMOVESLEFT
     // This function returns true if ther are moves
     // remaining on the board. It retruns false if
     // there are no moves left to play
@@ -45,6 +46,66 @@ public class BotMove{// extends JFrame implements ActionListener{
             }
         }
         return false;
+    }
+
+    // EVALUATE
+    // This is the evaluation function for minimax
+    public int evaluate(char b[][], char botPiece, char playerPiece){
+        
+        // Checking rows for X or O victory
+        for (int row = 0; row < 3; row++){
+            if (b[row][0] == b[row][1] && b[row][1] == b[row][2]){
+                if (b[row][0] == playerPiece){
+                    return +10;
+                }
+                else if (b[row][0] == botPiece){
+                    return -10;
+                }
+            }
+        }
+
+        // Checking columns for X or O victory
+        for (int col = 0; col < 3; col++){
+            if (b[0][col] == b[1][col] && b[1][col] == b[2][col]){
+                if (b[0][col] == playerPiece){
+                    return +10;
+                }
+                else if (b[0][col] == botPiece){
+                    return -10;
+                }
+            }
+        }
+
+        // Checking diagonals for victory
+        if (b[0][0] == b[1][1] && b[1][1] == b[2][2]){
+            if (b[0][0] == playerPiece){
+                return +10;
+            }
+            else if (b[0][0] == botPiece){
+                return -10;
+            }
+        }
+        if (b[0][2] == b[1][1] && b[1][1] == b[2][0]){
+            if (b[0][2] == playerPiece){
+                return +10;
+            }
+            else if (b[0][2] == botPiece){
+                return -10;
+            }
+        }
+
+        // If none of the wincons return an eval then return 0
+        return 0;
+    }
+
+    // MINIMAX
+    // This is the minimax function. It considers all the possible
+    // ways the game can go and returns the value of the board
+    public int minimax(char[][] board, int depth, boolean isMax){
+
+
+        
+        return 0;
     }
 
     // FINDBESTMOVE
