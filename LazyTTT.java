@@ -2,100 +2,102 @@ import java.util.*;
 
 public class LazyTTT {
 
-    private String[][] boardState;
+    private char[][] boardState;
 
     public static void main(String[] args){
         LazyTTT terminalGame = new LazyTTT();
     }
 
     public LazyTTT(){
-        initialBoardTerminal();
+        boardState = new char[3][3];
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                boardState[i][j] = '_';
+            }
+        }
         terminalPlay();
     }
 
-    public String[][] initialBoardTerminal(){
-        String[][] board = new String[3][3];
+    public char[][] initialBoardTerminal(){
+        char[][] board = new char[3][3];
         //Arrays.fill(board, "_");
         for(int i = 0; i < board.length; i++){
             for(int j = 0; j < 3; j++){
-                board[i][j] = "_";
+                board[i][j] = '_';
             }
         }
         return board;
     }
 
     //if the given boardstate matches any of the following board states, then the board is in a winning state
-    public boolean winCon(String[][] boardState){
+    public boolean winCon(char[][] boardState){
         //first three are across wins
-        if (boardState[0][0].equals("O") && boardState[1][0].equals("O") && boardState[2][0].equals("O")){
+        if (boardState[0][0] == 'O' && boardState[1][0] == 'O' && boardState[2][0] == 'O'){
             return true;
         }
-        if (boardState[0][1].equals("O") && boardState[1][1].equals("O") && boardState[2][1].equals("O")){
+        if (boardState[0][1] == 'O' && boardState[1][1] == 'O' && boardState[2][1] == 'O'){
             return true;
         }
-        if (boardState[0][2].equals("O") && boardState[1][2].equals("O") && boardState[2][2].equals("O")){
+        if (boardState[0][2] == 'O' && boardState[1][2] == 'O' && boardState[2][2] == 'O'){
             return true;
         }
         //second three are down wins
-        if (boardState[0][0].equals("O") && boardState[0][1].equals("O") && boardState[0][2].equals("O")){
+        if (boardState[0][0] == 'O' && boardState[0][1] == 'O' && boardState[0][2] == 'O'){
             return true;
         }
-        if (boardState[1][0].equals("O") && boardState[1][1].equals("O") && boardState[1][2].equals("O")){
+        if (boardState[1][0] == 'O' && boardState[1][1] == 'O' && boardState[1][2] == 'O'){
             return true;
         }
-        if (boardState[2][0].equals("O") && boardState[2][1].equals("O") && boardState[2][2].equals("O")){
+        if (boardState[2][0] == 'O' && boardState[2][1] == 'O' && boardState[2][2] == 'O'){
             return true;
         }
         //the next two are diagonal wins
-        if (boardState[0][0].equals("O") && boardState[1][1].equals("O") && boardState[2][2].equals("O")){
+        if (boardState[0][0] == 'O' && boardState[1][1] == 'O' && boardState[2][2] == 'O'){
             return true;
         }
-        if (boardState[2][0].equals("O") && boardState[1][1].equals("O") && boardState[0][2].equals("O")){
+        if (boardState[2][0] == 'O' && boardState[1][1] == 'O' && boardState[0][2] == 'O'){
             return true;
         }
         //same thing with O's
         //first three are across wins
-        if (boardState[0][0].equals("X") && boardState[1][0].equals("X") && boardState[2][0].equals("X")){
+        if (boardState[0][0] == 'X' && boardState[1][0] == 'X' && boardState[2][0] == 'X'){
             return true;
         }
-        if (boardState[0][1].equals("X") && boardState[1][1].equals("X") && boardState[2][1].equals("X")){
+        if (boardState[0][1] == 'X' && boardState[1][1] == 'X' && boardState[2][1] == 'X'){
             return true;
         }
-        if (boardState[0][2].equals("X") && boardState[1][2].equals("X") && boardState[2][2].equals("X")){
+        if (boardState[0][2] == 'X' && boardState[1][2] == 'X' && boardState[2][2] == 'X'){
             return true;
         }
         //second three are down wins
-        if (boardState[0][0].equals("X") && boardState[0][1].equals("X") && boardState[0][2].equals("X")){
+        if (boardState[0][0] == 'X' && boardState[0][1] == 'X' && boardState[0][2] == 'X'){
             return true;
         }
-        if (boardState[1][0].equals("X") && boardState[1][1].equals("X") && boardState[1][2].equals("X")){
+        if (boardState[1][0] == 'X' && boardState[1][1] == 'X' && boardState[1][2] == 'X'){
             return true;
         }
-        if (boardState[2][0].equals("X") && boardState[2][1].equals("X") && boardState[2][2].equals("X")){
+        if (boardState[2][0] == 'X' && boardState[2][1] == 'X' && boardState[2][2] == 'X'){
             return true;
         }
         //the next two are diagonal wins
-        if (boardState[0][0].equals("X") && boardState[1][1].equals("X") && boardState[2][2].equals("X")){
+        if (boardState[0][0] == 'X' && boardState[1][1] == 'X' && boardState[2][2] == 'X'){
             return true;
         }
-        if (boardState[2][0].equals("X") && boardState[1][1].equals("X") && boardState[0][2].equals("X")){
+        if (boardState[2][0] == 'X' && boardState[1][1] == 'X' && boardState[0][2] == 'X'){
             return true;
         }
         return false;
     }
 
-    public String[][] changeBoard(String[][] board, boolean botTurn, String playerPiece, String botPiece){
-        Random rand = new Random();
+    public char[][] changeBoard(char[][] board, boolean botTurn, char playerPiece, char botPiece){
         Scanner input = new Scanner(System.in);
+        BotMove botMove = new BotMove();
 
         //this is where the bot move is calculated, will call BotMoves in the future for minimax optimal move.
         if (botTurn == true){
-                        
-            System.out.println("\nThe bot will now go:\n");
-            //bot makes a random move on the board
-            int botRow = rand.nextInt(3);
-            int botColumn = rand.nextInt(3);
-            board[botRow][botColumn] = botPiece;
+            
+            boardState = botMove.findBestMove(boardState);
+            
             
         }
         if (botTurn == false){
@@ -104,12 +106,12 @@ public class LazyTTT {
             int column = input.nextInt();
             System.out.print("Column (1-3):\n> ");
             int row = input.nextInt();
-            board[column-1][row-1] = playerPiece;
+            boardState[column-1][row-1] = playerPiece;
         }
         
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){ 
-                System.out.print(board[i][j] + " ");
+                System.out.print(boardState[i][j] + " ");
             }
             System.out.println();
         }
@@ -118,34 +120,35 @@ public class LazyTTT {
     
     //method for playing the game in the terminal
     public void terminalPlay(){
+        BotMove botMove = new BotMove();
         Scanner input = new Scanner(System.in);
-        String playerChar = "";
-        String botChar = "";
+        char playerChar;
+        char botChar;
         boolean botTurn = true;
         boolean again = true;
         int counter = 2;
-        System.out.println("\nYou have entered terminal play mode. When prompted, enter your input then press return.");
-        String[][] board = initialBoardTerminal();
-        System.out.print("Choose X's or O's (type X or O): \n> ");
-        String letterChoice = input.next();
+        System.out.println("\nYou have entered terminal play mode. When prompted, type your input then press enter.");
+        char[][] board = initialBoardTerminal();
+        //System.out.print("Choose X's or O's (type X or O): \n> ");
+        //char letterChoice = input.next();
         //add in a while loop later to avoid a misatke input
-        if (letterChoice.equals("X") || letterChoice.equals("x")){
-            playerChar = "X";
-            botChar = "O";
-            System.out.println("You have chosen X's. You go first.");
-            System.out.println("In order to select a spot on the board, you must type the column number first, then the row number.");
-            System.out.println("You may now make the first move.");
-        }
-        else if (letterChoice.equals("O") || letterChoice.equals("o")){
-            playerChar = "O";
-            botChar = "X";
+        //if (letterChoice == 'X' || letterChoice == 'X'){
+        playerChar = 'X';
+        botChar = 'O';
+        System.out.println("You have chosen X's. You go first.");
+        System.out.println("In order to select a spot on the board, you must type the column number first, then the row number.");
+        System.out.println("You may now make the first move.");
+        
+        /*else if (letterChoice == 'O' || letterChoice == 'O'){
+            playerChar = 'O';
+            botChar = 'X';
             System.out.println("You have chosen O's. You go second.");
             System.out.println("In order to select a spot on the board, you must type the column number first, then the row number.");
             System.out.println("The bot will make the first move.");
             
             //sets counter to 3 so that it becomes the bot's turn first in the following loop
             counter = 3;
-        }
+        }*/
         
         //while loop runs the actual playing of the game (maybe make a different function at some point)
         while(again == true){
@@ -162,8 +165,8 @@ public class LazyTTT {
                 botTurn = true;
             }
             
-            boardState = changeBoard(board, botTurn, playerChar, botChar);
-            boolean done = winCon(board);
+            boardState = changeBoard(boardState, botTurn, playerChar, botChar);
+            boolean done = winCon(boardState);
             counter++;
             if (done == true){
                 again = false;
@@ -176,5 +179,5 @@ public class LazyTTT {
             }
         }
     
-}
+    }
 }

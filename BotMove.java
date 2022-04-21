@@ -2,16 +2,15 @@ import java.util.Random;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
-//this class needs to take the mainboard as a parameter, and return a move so that the
-//main board gets updated             
+        
 public class BotMove{// extends JFrame implements ActionListener{
-
-    static class Move{
-        int row, col;
-    }
+ static class Move{
+    int row, col;
+    };
 
     private char[][] board;
+    private char botPiece = 'O';
+    private char playerPiece = 'X';
 
     //CONSTRUCTOR
     public BotMove(){
@@ -50,7 +49,7 @@ public class BotMove{// extends JFrame implements ActionListener{
 
     // EVALUATE
     // This is the evaluation function for minimax
-    public int evaluate(char b[][], char botPiece, char playerPiece){
+    public int evaluate(char b[][]){
         
         // Checking rows for X or O victory
         for (int row = 0; row < 3; row++){
@@ -102,16 +101,74 @@ public class BotMove{// extends JFrame implements ActionListener{
     // This is the minimax function. It considers all the possible
     // ways the game can go and returns the value of the board
     public int minimax(char[][] board, int depth, boolean isMax){
+        int score = evaluate(board);
 
+        // If maximizer has won the game
+        // return his/her evaluated score
+        if (score == 10){
+            return score;
+        }
+        if (score == -10){
+            return score;
+        }
 
+        // If there are no more moves and no winner then it's a tie
+        if (isMovesLeft(board) == false){
+            return 0;
+        }
+
+        // If this is maximizer's move
+        if (isMax){
+            int best = -1000;
         
-        return 0;
+
+            // Traverse all cells
+            for (int i = 0; i < 3; i++){
+                for (int j = 0; j < 3; j++){
+                    // Check if cell is empty
+                    if (board[i][j] == '_'){
+                        // Make the move
+                        board[i][j] = playerPiece;
+
+                        // Call minimax recursively and choose the max value
+                        best = Math.max(best, minimax(board, depth + 1, isMax));
+
+                        // Undo the move
+                        board[i][j] = '_';
+                    }
+                }
+            }
+            return best;
+        }
+        // If it's minimizer's move
+        else{
+            int best = 1000;
+
+            // Traverse all cells
+            for (int i = 0; i < 3; i++){
+                for (int j = 0; j < 3; j++){
+                    // Check if cell is empty
+                    if (board[i][j] == '_'){
+                        // Make the move
+                        board[i][j] = botPiece;
+
+                        // Call minimax recursively and choose the minimum value
+                        best = Math.min(best, minimax(board, depth + 1, !isMax));
+
+                        // Undo the move
+                        board[i][j] = '_';
+
+                    }
+                }
+            }
+            return best;
+        }
     }
 
     // FINDBESTMOVE
     // This method will return the best possible
     // move for the player
-    public Move findBestMove(char[][] board, char botPiece){
+    public char[][] findBestMove(char[][] board){
         int bestVal = -1000;
         Move bestMove = new Move();
         bestMove.row = -1;
@@ -125,7 +182,7 @@ public class BotMove{// extends JFrame implements ActionListener{
                 // Check if cell is empty
                 if (board[i][j] == '_'){
                     // Make the move
-                    board[i][j] = botPiece;
+                    board[i][j] = playerPiece;
 
                     // Compute evaluation function for this move
                     int moveVal = minimax(board, 0, false);
@@ -145,8 +202,9 @@ public class BotMove{// extends JFrame implements ActionListener{
             }
         }
 
-        System.out.printf("The value of the best move is : %d/n/n", bestVal);
+        System.out.printf("\nThe value of the best move is : %d\n", bestVal);
 
-        return bestMove;
+        board[bestMove.row][bestMove.col] = botPiece;
+        return board;
     }
 }
