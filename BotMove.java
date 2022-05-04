@@ -131,7 +131,7 @@ public class BotMove{// extends JFrame implements ActionListener{
                         board[i][j] = playerPiece;
 
                         // Call minimax recursively and choose the max value
-                        best = Math.max(best, minimax(board, depth + 1, isMax));
+                        best = Math.max(best, minimax(board, depth + 1, !isMax));
 
                         // Undo the move
                         board[i][j] = '_';
@@ -153,7 +153,7 @@ public class BotMove{// extends JFrame implements ActionListener{
                         board[i][j] = botPiece;
 
                         // Call minimax recursively and choose the minimum value
-                        best = Math.min(best, minimax(board, depth + 1, !isMax));
+                        best = Math.min(best, minimax(board, depth + 1, isMax));
 
                         // Undo the move
                         board[i][j] = '_';
@@ -202,7 +202,7 @@ public class BotMove{// extends JFrame implements ActionListener{
             }
         }
 
-        System.out.printf("\nThe value of the best move is : %d\n", bestVal);
+        //System.out.printf("\nThe value of the best move is : %d\n", bestVal);
 
         board[bestMove.row][bestMove.col] = botPiece;
         return board;

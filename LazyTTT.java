@@ -154,8 +154,8 @@ public class LazyTTT {
         while(again == true){
             //if we get to a cat, game exits and prints a statement about tying
             //maybe change this so that its more concrete later
-            if (((counter >= 12))){
-                System.out.println("\nThis game has resulted in a tie.");
+            if (((counter >= 11))){
+                System.out.println("\nThis game has resulted in a tie.\n");
                 break;
             }
             if (counter % 2 == 0){
